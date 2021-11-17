@@ -17,20 +17,26 @@ public class ConectToServer : MonoBehaviourPunCallbacks
     public override void OnConnectedToMaster()
     {
         Debug.Log("Conectado al server");
-        PhotonNetwork.JoinRandomRoom();
+        PhotonNetwork.JoinLobby();
     }
 
-    public override void OnJoinedRoom() {
-        Debug.Log("Conectado a la sala");
-        PhotonNetwork.LoadLevel("Game");
-    }
-
-    public override void OnJoinRandomFailed(short returnCode, string message)
+    public override void OnJoinedLobby()
     {
-        string roomName = "Room " + Random.Range(1000, 10000);
-
-        RoomOptions options = new RoomOptions { MaxPlayers = 8 };
-
-        PhotonNetwork.CreateRoom(roomName, options, null);
+        Debug.Log("Conectado al Lobby");
+        SceneManager.LoadScene("Lobby");
     }
+
+    //public override void OnJoinedRoom() {
+    //    Debug.Log("Conectado a la sala");
+    //    PhotonNetwork.LoadLevel("Game");
+    //}
+
+    //public override void OnJoinRandomFailed(short returnCode, string message)
+    //{
+    //    string roomName = "Room " + Random.Range(1000, 10000);
+
+    //    RoomOptions options = new RoomOptions { MaxPlayers = 8 };
+
+    //    PhotonNetwork.CreateRoom(roomName, options, null);
+    //}
 }
