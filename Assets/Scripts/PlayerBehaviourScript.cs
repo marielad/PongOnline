@@ -8,7 +8,7 @@ public class PlayerBehaviourScript : MonoBehaviour
     public KeyCode upKey;
     public KeyCode downKey;
     public float speed = 6.0f;
-    float limit = 2.7f;
+    float limit = 2.3f;
     float limitDown = -3.6f;
 
     // Start is called before the first frame update
