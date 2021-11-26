@@ -155,7 +155,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerPrefab: {fileID: 4865641619947096964, guid: 26dae5bb7c4479c4f83f665d3e437bdb,
     type: 3}
+  playerPrefab2: {fileID: 2052712814100137069, guid: 123d969984d2ffe40a37fadc29f8d935,
+    type: 3}
   spawnPos: {x: -8, y: 0, z: 0}
+  spawnPos2: {x: 8, y: 0, z: 0}
 --- !u!4 &79762042
 Transform:
   m_ObjectHideFlags: 0
