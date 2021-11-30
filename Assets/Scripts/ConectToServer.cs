@@ -9,6 +9,7 @@ public class ConectToServer : MonoBehaviourPunCallbacks
 {
     void Awake()
     {
+        PhotonNetwork.AutomaticallySyncScene = true;
         PhotonNetwork.ConnectUsingSettings();
         Debug.Log("Conectado al server?");
 

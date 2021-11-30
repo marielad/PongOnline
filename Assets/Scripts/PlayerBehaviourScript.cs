@@ -5,12 +5,11 @@ using UnityEngine;
 
 public class PlayerBehaviourScript : MonoBehaviour
 {
+    public Rigidbody2D rb;
+    public float speed = 600f;
 
-    public KeyCode upKey;
-    public KeyCode downKey;
-    public float speed = 6.0f;
-    float limit = 2.3f;
-    float limitDown = -3.6f;
+    float move;
+    Vector3 startPos;
 
     PhotonView view;
 
@@ -18,13 +17,23 @@ public class PlayerBehaviourScript : MonoBehaviour
     void Start()
     {
         view = GetComponent<PhotonView>();
+        startPos = transform.position;
+        Reset();
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (view.IsMine){
-       //move
-       }
+        if (view.IsMine)
+        {
+            move = Input.GetAxisRaw("Vertical");
+            rb.velocity = new Vector2(rb.velocity.x, move * speed);
+        }
+    }
+
+    public void Reset()
+    {
+        rb.velocity = Vector2.zero;
+        transform.position = startPos;
     }
 }

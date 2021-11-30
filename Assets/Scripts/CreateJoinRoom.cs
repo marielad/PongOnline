@@ -8,15 +8,22 @@ using UnityEngine.UI;
 
 public class CreateJoinRoom : MonoBehaviourPunCallbacks
 {
-    [SerializeField]
     private byte maxPlayersPerRoom = 2;
     public TMP_InputField createInput;
     public TMP_InputField joinInput;
     public Button startGameButton;
-
-    private void Awake()
+    public GameObject waitTxt;
+    private void Update()
     {
-        PhotonNetwork.AutomaticallySyncScene = true;
+        if (PhotonNetwork.IsMasterClient && PhotonNetwork.CurrentRoom.PlayerCount >= 2)
+        {
+
+            startGameButton.gameObject.SetActive(true);
+            waitTxt.SetActive(false);
+        }
+        else { 
+            startGameButton.gameObject.SetActive(false); 
+        }
     }
 
     public void CreateRoom()
@@ -31,13 +38,9 @@ public class CreateJoinRoom : MonoBehaviourPunCallbacks
     public override void OnJoinedRoom()
     {
         Debug.Log("NÚMERO DE JUGADORES: "+ PhotonNetwork.CurrentRoom.PlayerCount);
-        if (PhotonNetwork.CurrentRoom.PlayerCount != 2)
+        if (PhotonNetwork.IsMasterClient)
         {
-            //WaitingOponent
-        }
-        else
-        {
-                startGameButton.gameObject.SetActive(true);
+            waitTxt.SetActive(true);
         }
     }
 

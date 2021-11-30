@@ -2,22 +2,30 @@
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using Photon.Pun;
 
 public class BallBehaviour : MonoBehaviour
 {
-    public float speed = 10.0f;
+    public float speed = 1000f;
+    public TextMeshProUGUI playerOneScore;
+    public TextMeshProUGUI playerTwoScore;
+    public Rigidbody2D rigidbody;
+
+
+    PhotonView photonView;
     Vector3 direction;
     float originalSpeed;
     int scorePlayerOne;
     int scorePlayerTwo;
 
-    public TextMeshProUGUI playerOneScore;
-    public TextMeshProUGUI playerTwoScore;
-
-
+    private void Awake()
+    {
+        rigidbody = GetComponent<Rigidbody2D>();
+    }
     // Start is called before the first frame update
     void Start()
     {
+        photonView = gameObject.GetComponent<PhotonView>();
         originalSpeed = speed;
         ResetBall();
     }
@@ -25,26 +33,31 @@ public class BallBehaviour : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        transform.Translate(direction * speed * Time.deltaTime);
-
-        if (speed < 30)
+        if (!photonView.IsMine)
         {
-            speed += Time.deltaTime;
+            return;
         }
+    }
+
+    public void Launch() {
+        float x = Random.Range(0, 2) == 0 ? -1 : 1;
+        float y = Random.Range(0, 2) == 0 ? -1 : 1;
+
+        rigidbody.velocity = new Vector2(speed * x, speed * y);
     }
 
     public void OnCollisionEnter2D(Collision2D collision)
     {
         AudioManager.instance.PlayPongSound();
-        if (collision.gameObject.tag.Equals("Wall")) {
+        //    if (collision.gameObject.tag.Equals("Wall")) {
 
-            direction = new Vector3(direction.x, direction.y * Random.Range(-1f, 0f), 0f);
+        //        direction = new Vector3(direction.x, direction.y * Random.Range(-1f, 0f), 0f);
 
-        } else if (collision.gameObject.tag.Equals("Player")) {
+        //    } else if (collision.gameObject.tag.Equals("Player")) {
 
-            direction = new Vector3(direction.x * -1.0f, direction.y * Random.Range(-1f, 1f) + 0.5f, 0f);
+        //        direction = new Vector3(direction.x * -1.0f, direction.y * Random.Range(-1f, 1f) + 0.5f, 0f);
 
-        }
+        //    }
     }
 
     void OnTriggerEnter2D(Collider2D col)
@@ -63,12 +76,13 @@ public class BallBehaviour : MonoBehaviour
         playerTwoScore.text = scorePlayerTwo.ToString();
         
         ResetBall();
+        //PlayerBehaviourScript.Reset();
     }
 
     void ResetBall() {
         speed = originalSpeed;
-        direction = new Vector3(Random.Range(-1f, 1f), Random.Range(-1.5f, 1.5f), 0);
         transform.position = Vector3.zero;
+        Launch();
     }
 
 }
