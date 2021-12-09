@@ -3,17 +3,18 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using Photon.Pun;
+using UnityEngine.SceneManagement;
 
-public class BallBehaviour : MonoBehaviour
+public class BallBehaviour : MonoBehaviourPunCallbacks
 {
     public float speed = 1000f;
     public TextMeshProUGUI playerOneScore;
     public TextMeshProUGUI playerTwoScore;
+    public TextMeshProUGUI score;
+    public GameObject winScreen;
     public Rigidbody2D rigidbody;
-
-
+    
     PhotonView photonView;
-    Vector3 direction;
     float originalSpeed;
     int scorePlayerOne;
     int scorePlayerTwo;
@@ -72,11 +73,19 @@ public class BallBehaviour : MonoBehaviour
         {
             scorePlayerOne++;
         }
-        playerOneScore.text = scorePlayerOne.ToString();
-        playerTwoScore.text = scorePlayerTwo.ToString();
-        
-        ResetBall();
-        //PlayerBehaviourScript.Reset();
+
+        UpdateScore();
+
+        if (scorePlayerOne == 3 || scorePlayerTwo == 3)
+        {
+            rigidbody.velocity = Vector2.zero;
+            score.text = scorePlayerOne + " - " + scorePlayerTwo;
+            winScreen.SetActive(true);
+        }
+        else {
+            ResetBall();
+        }
+
     }
 
     void ResetBall() {
@@ -85,4 +94,13 @@ public class BallBehaviour : MonoBehaviour
         Launch();
     }
 
+    void UpdateScore()
+    {
+        playerOneScore.text = scorePlayerOne.ToString();
+        playerTwoScore.text = scorePlayerTwo.ToString();
+    }
+
+    public void BackToLobby() {
+        SceneManager.LoadScene("Lobby");
+    }
 }
